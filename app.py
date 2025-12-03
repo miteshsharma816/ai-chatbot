@@ -21,11 +21,24 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Configure the Gemini API (use env var in production)
 API_KEY = os.environ.get('GENAI_API_KEY')
-if not API_KEY:
-    print("Warning: GENAI_API_KEY not set. Gemini calls will fail until configured.")
-else:
-    genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')  # Latest available flash model
+model = None
+
+def get_genai_model():
+    """Lazy-load Gemini model, handle missing API key gracefully."""
+    global model
+    if model is not None:
+        return model
+    
+    if not API_KEY:
+        return None
+    
+    try:
+        genai.configure(api_key=API_KEY)
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        return model
+    except Exception as e:
+        print(f"Error initializing Gemini model: {e}")
+        return None
 
 # Database configuration (use environment variables in production)
 DB_CONFIG = {
@@ -290,6 +303,16 @@ def send_message():
     
     # Get AI response
     try:
+        # Check if Gemini API is configured
+        current_model = get_genai_model()
+        if not current_model:
+            cursor.close()
+            conn.close()
+            return jsonify({
+                "success": False, 
+                "message": "Gemini API not configured. Please set GENAI_API_KEY environment variable. See README.md for setup instructions."
+            }), 503
+        
         # Get conversation history for context
         cursor.execute(
             "SELECT sender, content FROM messages WHERE conversation_id = %s ORDER BY created_at ASC",
@@ -298,7 +321,7 @@ def send_message():
         history = cursor.fetchall()
         
         # Build chat with history
-        chat = model.start_chat(history=[])
+        chat = current_model.start_chat(history=[])
         for msg in history[:-1]:  # Exclude the message we just added
             if msg['sender'] == 'user':
                 chat.send_message(msg['content'])
@@ -376,6 +399,15 @@ def upload_resume():
         
         # Analyze with AI
         try:
+            # Check if Gemini API is configured
+            current_model = get_genai_model()
+            if not current_model:
+                results.append({
+                    "filename": original_filename,
+                    "error": "Gemini API not configured. Please set GENAI_API_KEY environment variable."
+                })
+                continue
+            
             if job_description:
                 # Score resume against job description
                 prompt = f"""Analyze this resume against the job description and provide:
@@ -409,7 +441,7 @@ Resume Text:
 
 Format your response in clear sections."""
 
-            response = model.generate_content(prompt)
+            response = current_model.generate_content(prompt)
             analysis = response.text
             
             # Extract score from analysis (look for number out of 100)
