@@ -4,4 +4,4 @@ mysql-connector-python
 Flask-Session
 PyPDF2
 python-docx
-
+python-dotenv

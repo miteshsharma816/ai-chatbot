@@ -8,6 +8,13 @@ from datetime import datetime
 import PyPDF2
 import docx
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed, fall back to os.environ
+
 app = Flask(__name__)
 # Use environment variable for secret key in production
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')  # Change this in production!
@@ -20,7 +27,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Configure the Gemini API (use env var in production)
-API_KEY = os.environ.get('GENAI_API_KEY')
+API_KEY = os.environ.get('AIzaSyAUaKJWU0gsNJ_DkC91fBSJ3riH2M_0B7Q')
 model = None
 
 def get_genai_model():
