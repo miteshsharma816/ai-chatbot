@@ -1,0 +1,105 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets and environment files
+.env
+.env.*
+
+# Uploaded files and generated models
+uploads/
+chatbot_model.h5
+*.h5
+
+# Database files
+*.sqlite3
+*.db
+
+# OneDrive and user-specific
+Desktop.ini
+~$*
+
+# Ignore large/backup directories
+*.zip
+*.tar.gz
+
+# Node/npm
+node_modules/
+
+# Coverage and test output
+coverage/
+
+# Ignore compiled frontend assets
+static/dist/
+
+# Keep this repo tidy
+.idea/
+
