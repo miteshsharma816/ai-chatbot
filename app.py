@@ -27,7 +27,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Configure the Gemini API (use env var in production)
-API_KEY = os.environ.get('AIzaSyAUaKJWU0gsNJ_DkC91fBSJ3riH2M_0B7Q')
+API_KEY = os.environ.get('GENAI_API_KEY')
 model = None
 
 def get_genai_model():
